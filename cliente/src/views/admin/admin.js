@@ -1,12 +1,12 @@
-function renderAdmin() {
+export function renderAdmin() {
     return `
         <header class="border-b border-blue-100 bg-white/90 backdrop-blur">
       <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <a class="text-xl font-black text-blue-900" href="/src/views/home.html">TaskFlowSPA</a>
+        <a class="text-xl font-black text-blue-900" href="/">TaskFlowSPA</a>
         <nav class="hidden gap-3 md:flex">
-          <a class="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-blue-50 hover:text-blue-700" href="/src/views/dashboard.html">Dashboard</a>
-          <a class="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-blue-50 hover:text-blue-700" href="/src/views/tasks.html">Tareas</a>
-          <a class="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-blue-50 hover:text-blue-700" href="/src/views/profile.html">Perfil</a>
+          <a class="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-blue-50 hover:text-blue-700" href="/dashboard">Dashboard</a>
+          <a class="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-blue-50 hover:text-blue-700" href="/tasks">Tareas</a>
+          <a class="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-blue-50 hover:text-blue-700" href="/profile">Perfil</a>
           <a class="rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white" href="/src/views/admin.html">Admin</a>
         </nav>
       </div>
@@ -23,9 +23,9 @@ function renderAdmin() {
         <article class="rounded-3xl border border-blue-100 bg-white p-6 shadow-lg shadow-blue-50">
           <h2 class="text-xl font-bold text-slate-900">Acciones rapidas</h2>
           <div class="mt-5 grid gap-4">
-            <a class="rounded-2xl bg-blue-50 px-5 py-4 text-sm font-semibold text-blue-700 hover:bg-blue-100" href="/src/views/admin.html">Gestionar usuarios</a>
-            <a class="rounded-2xl bg-blue-50 px-5 py-4 text-sm font-semibold text-blue-700 hover:bg-blue-100" href="/src/views/tasks.html">Ver todas las tareas</a>
-            <a class="rounded-2xl bg-blue-50 px-5 py-4 text-sm font-semibold text-blue-700 hover:bg-blue-100" href="/src/views/dashboard.html">Volver al dashboard</a>
+            <a class="rounded-2xl bg-blue-50 px-5 py-4 text-sm font-semibold text-blue-700 hover:bg-blue-100" href="/admin">Gestionar usuarios</a>
+            <a class="rounded-2xl bg-blue-50 px-5 py-4 text-sm font-semibold text-blue-700 hover:bg-blue-100" href="/tasks">Ver todas las tareas</a>
+            <a class="rounded-2xl bg-blue-50 px-5 py-4 text-sm font-semibold text-blue-700 hover:bg-blue-100" href="/dashboard">Volver al dashboard</a>
           </div>
         </article>
 
@@ -55,7 +55,7 @@ function renderAdmin() {
                 </div>
                 <div class="flex gap-2">
                   <span class="rounded-full bg-white px-3 py-1 text-xs font-bold text-blue-700">ADMIN</span>
-                  <a class="rounded-full border border-blue-200 px-3 py-1 text-xs font-semibold text-blue-700 hover:bg-white" href="/src/views/admin.html">Editar rol</a>
+                  <a class="rounded-full border border-blue-200 px-3 py-1 text-xs font-semibold text-blue-700 hover:bg-white" href="/admin">Editar rol</a>
                 </div>
               </div>
             </div>
@@ -64,4 +64,8 @@ function renderAdmin() {
       </section>
     </main>
     `
+}
+
+export function setupAdmin(){
+  return
 }
