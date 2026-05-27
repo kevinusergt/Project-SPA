@@ -6,9 +6,35 @@ export function renderRouter() {
     if(!app){
         return
     }   
-    return
+    
+    const currentPath = window.location.pathname
+    const route = routes[currentPath] ?? {render: notFoundedView}
+
+    app.innerHTML = route.render()
+    if(route.setup){
+        route.setup()
+    }
 }
 
-function initRouter(){
-    return
+export function initRouter(){
+    document.addEventListener("click", (event)=>{
+        const link = event.target.closest("a")
+        if(!link){
+            return;
+        }
+
+        const href = link.getAttribute("href")
+        if (!href || !href.startsWith("/")) {
+            return;
+        }
+
+        event.preventDefault()
+
+        window.history.pushState({},"", href)
+        renderRouter()
+    })
+
+    window.addEventListener("popstate", renderRouter)
+    renderRouter()
 }
+

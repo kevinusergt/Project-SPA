@@ -1,8 +1,36 @@
 {
-    "users":[
-
-    ],
-    "roles":[
-        
-    ]
+  "users": [
+    {
+      "name": "kevi",
+      "lastname": "fe",
+      "email": "sfdsf",
+      "password": "efese",
+      "role": [
+        "USER"
+      ],
+      "id": "SzC9BNYlzsE"
+    },
+    {
+      "name": "ewf",
+      "lastname": "fwe",
+      "email": "fwe",
+      "password": "fe",
+      "role": [
+        "USER"
+      ],
+      "id": "1_Ts0xsL6MI"
+    },
+    {
+      "name": "sa",
+      "lastname": "das",
+      "email": "dsada",
+      "password": "dasss",
+      "role": [
+        "USER"
+      ],
+      "id": "SOx7eU4_RPc"
+    }
+  ],
+  "roles": [],
+  "$schema": "./node_modules/json-server/schema.json"
 }

@@ -1,7 +1,5 @@
-import { routes } from "./router/routes";
+
+import { initRouter } from "./router/router";
 import "./styles/global.css";
 
-
-const app = document.getElementById("app")
-
-app.innerHTML = routes["/"].render()
+initRouter()

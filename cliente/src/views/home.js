@@ -23,8 +23,8 @@ export function renderHome() {
             luego en una SPA real con autenticacion, roles, permisos y CRUD de tareas.
           </p>
           <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-            <a class="inline-flex items-center justify-center rounded-2xl bg-blue-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-blue-200 hover:bg-blue-500" href="/src/views/login.html">Iniciar sesion</a>
-            <a class="inline-flex items-center justify-center rounded-2xl border border-blue-200 bg-white px-6 py-3 text-sm font-bold text-blue-700 hover:bg-blue-50" href="/src/views/register.html">Crear cuenta</a>
+            <a class="inline-flex items-center justify-center rounded-2xl bg-blue-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-blue-200 hover:bg-blue-500" href="/login">Iniciar sesion</a>
+            <a class="inline-flex items-center justify-center rounded-2xl border border-blue-200 bg-white px-6 py-3 text-sm font-bold text-blue-700 hover:bg-blue-50" href="/register">Crear cuenta</a>
           </div>
         </div>
 

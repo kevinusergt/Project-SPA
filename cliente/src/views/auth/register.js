@@ -1,5 +1,9 @@
+import Swal from 'sweetalert2'
+import { createUser } from '../../services/users.service';
+import { renderRouter } from '../../router/router';
+
 export function renderRegister() {
-    return `
+  return `
     <main class="grid min-h-screen lg:grid-cols-[0.95fr_1.05fr]">
       <section class="hidden border-r border-blue-100 bg-blue-600 p-10 text-white lg:flex lg:flex-col lg:justify-between">
         <a class="text-xl font-black tracking-tight" href="/">TaskFlowSPA</a>
@@ -23,7 +27,7 @@ export function renderRegister() {
             <a class="rounded-full border border-blue-200 px-4 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-50" href="/login">Ya tengo cuenta</a>
           </div>
 
-          <form class="mt-8 grid gap-5">
+          <form id="register-form" class="mt-8 grid gap-5">
             <div class="grid gap-5 md:grid-cols-2">
               <div>
                 <label class="mb-2 block text-sm font-medium text-slate-700" for="register-name">Nombre</label>
@@ -54,7 +58,7 @@ export function renderRegister() {
               </div>
             </div>
 
-            <a class="inline-flex items-center justify-center rounded-2xl bg-blue-600 px-5 py-3 text-sm font-bold text-white hover:bg-blue-500" href="/login">
+            <a id ="register" class="inline-flex items-center justify-center rounded-2xl bg-blue-600 px-5 py-3 text-sm font-bold text-white hover:bg-blue-500" href="/login">
               Registrarme
             </a>
           </form>
@@ -66,5 +70,56 @@ export function renderRegister() {
 }
 
 export function setupRegister() {
-  return
+
+  const btnRegister = document.getElementById("register")
+
+  btnRegister.addEventListener("click", async (event) => {
+    event.preventDefault();
+    event.stopPropagation()
+
+    const form = document.getElementById('register-form')
+    const nombre = document.getElementById('register-name').value.trim()
+    const apellido = document.getElementById('register-lastname').value.trim()
+    const email = document.getElementById('register-email').value.trim()
+    const password = document.getElementById('register-password').value.trim()
+    const role = document.getElementById('register-role')
+
+    if (!nombre || !apellido || !email || !password) {
+      Swal.fire({
+        text: 'No puede estar vacio',
+        icon: 'error',
+        footer: 'Llene los campos',
+        confirmButtonText: 'Cool'
+      });
+
+      form.reset()
+
+      return;
+    }
+
+    const newUser = {
+      name: nombre,
+      lastname: apellido,
+      email: email,
+      password: password,
+      role: [role.value]
+    }
+
+    const response = await createUser(newUser);
+
+    if (response) {
+      Swal.fire({
+        text: 'Usuario creado',
+        icon: 'success',
+        confirmButtonText: 'Cool'
+      })
+    }
+
+    window.history.pushState({}, "", "/login")
+    renderRouter()
+
+  })
 }
+
+
+
