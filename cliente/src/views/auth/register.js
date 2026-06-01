@@ -1,6 +1,9 @@
-import Swal from 'sweetalert2'
-import { createUser } from '../../services/users.service';
+
+import { createUser, getUserByEmail } from '../../services/users.service';
 import { renderRouter } from '../../router/router';
+import { createdUserNoti } from '../../utils/createNotification';
+import { userExisting } from '../../utils/existNotification';
+import { emptyMessage } from '../../utils/emptyNotification';
 
 export function renderRegister() {
   return `
@@ -85,15 +88,16 @@ export function setupRegister() {
     const role = document.getElementById('register-role')
 
     if (!nombre || !apellido || !email || !password) {
-      Swal.fire({
-        text: 'No puede estar vacio',
-        icon: 'error',
-        footer: 'Llene los campos',
-        confirmButtonText: 'Cool'
-      });
+      emptyMessage();
+      form.reset();
+      return;
+    }
 
-      form.reset()
+    const existingUser = await getUserByEmail(email);
 
+    if(existingUser.length > 0){
+      userExisting();
+      form.reset();
       return;
     }
 
@@ -104,15 +108,13 @@ export function setupRegister() {
       password: password,
       role: [role.value]
     }
+ 
+  
 
     const response = await createUser(newUser);
 
     if (response) {
-      Swal.fire({
-        text: 'Usuario creado',
-        icon: 'success',
-        confirmButtonText: 'Cool'
-      })
+      createdUserNoti()
     }
 
     window.history.pushState({}, "", "/login")

@@ -1,8 +1,25 @@
+import { getSession, removeSession } from "../services/auth.service";
 import { notFoundedView, routes } from "./routes";
 
 
 export function renderRouter() {
     const app = document.getElementById('app');
+    const path = window.location.pathname;
+    const session = getSession();
+
+    if (session) {
+        if (path === "/login" || path === "/register" || path === "/") {
+            window.history.pushState({}, "", "/dashboard")
+        }
+    };
+
+    if (!session) {
+        removeSession();
+        if (path !== "/login" && path !== "/register" && path !== "/") {
+            window.history.replaceState({}, "", "/login")
+        }
+    }
+
     if(!app){
         return
     }   

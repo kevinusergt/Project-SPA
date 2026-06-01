@@ -1,3 +1,5 @@
+import { getSession, sessionLogout } from "../../services/auth.service";
+
 export function renderDashboard() {
     return `
       <header class="border-b border-blue-100 bg-white/90 backdrop-blur">
@@ -7,8 +9,8 @@ export function renderDashboard() {
           <a class="rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white" href="/dashboard">Dashboard</a>
           <a class="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-blue-50 hover:text-blue-700" href="/tasks">Tareas</a>
           <a class="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-blue-50 hover:text-blue-700" href="/profile">Perfil</a>
-          <a class="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-blue-50 hover:text-blue-700" href="/admin">Admin</a>
-          <a class="rounded-full px-4 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-50" href="/login">Logout</a>
+          <a id = "admin" class="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-blue-50 hover:text-blue-700" href="/admin">Admin</a>
+          <a id = "logout" class="rounded-full px-4 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-50" href="/login">Logout</a>
         </nav>
       </div>
     </header>
@@ -58,5 +60,19 @@ export function renderDashboard() {
 }
 
 export function setupDashboard(){
-  return
+  const admin = document.getElementById("admin");
+
+  const currentSession = getSession();
+  const userRole = currentSession.role[0];
+
+  if (userRole === "USER") {
+    admin.classList.add("hidden")
+  }
+
+
+  const logout = document.getElementById("logout");
+
+  logout.addEventListener("click", ()=>{
+    sessionLogout();
+  })
 }

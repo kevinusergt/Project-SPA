@@ -1,3 +1,7 @@
+import { renderRouter } from "../../router/router";
+import { loginSession } from "../../services/auth.service";
+import { emptyMessage } from "../../utils/emptyNotification";
+
 export function renderLogin() {
     return ` 
     <main class="grid min-h-screen lg:grid-cols-[1fr_0.95fr]">
@@ -48,9 +52,25 @@ export function renderLogin() {
 export function setupLogin(){
   const login = document.getElementById("login");
 
-  login.addEventListener("click", (e)=>{
-    e.preventDefault;
-    e.stopPropagation;
-    return
+  login.addEventListener("click", async (e)=>{
+    e.preventDefault();
+    e.stopPropagation();
+
+    const email = document.getElementById('email')?.value ?? "" ;
+    const password = document.getElementById('password')?.value ?? "";
+
+    if(!email || !password){
+      emptyMessage();
+      return;
+    }
+
+    const user = await loginSession(email, password);
+    window.history.replaceState({},"","/dashboard");
+    renderRouter()
+
+    if(!user){
+      throw new Error("Error para acceder"); 
+    }
+    
   })
 }

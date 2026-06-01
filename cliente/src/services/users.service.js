@@ -26,12 +26,12 @@ export async function createUser(user) {
 
 export async function getUserByEmail(email) {
     try {
-        const response = await fetch(`http://localhost:3000/users${email}`)
+        const response = await fetch(`http://localhost:3000/users?email=${email}`)
 
         if (!response.ok) {
             throw new Error("Hubo un error");
         }
-        const data = await response.json()
+        const data = await response.json();
         return data
     }
     catch (error) {
@@ -42,7 +42,7 @@ export async function getUserByEmail(email) {
 
 export async function deleteUser(email) {
     try {
-        const response = await fetch(`http://localhost:3000/users${email}`,
+        const response = await fetch(`http://localhost:3000/users?email=${email}`,
             {
                 method: 'DELETE',
                 headers: {
@@ -62,14 +62,14 @@ export async function updateUser(updates) {
         const response = await fetch('http://localhost:3000/users',
             {
                 method: 'PATCH',
-                headers:{
+                headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(updates)
             }
         )
     } catch (error) {
-        
+
     }
-    
+
 }
