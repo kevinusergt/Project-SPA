@@ -40,9 +40,9 @@ export async function getUserByEmail(email) {
 }
 
 
-export async function deleteUser(email) {
+export async function deleteUser(id) {
     try {
-        const response = await fetch(`http://localhost:3000/users?email=${email}`,
+        const response = await fetch(`http://localhost:3000/users/${id}`,
             {
                 method: 'DELETE',
                 headers: {
@@ -57,9 +57,9 @@ export async function deleteUser(email) {
 
 }
 
-export async function updateUser(updates) {
+export async function updateUser( id, updates) {
     try {
-        const response = await fetch('http://localhost:3000/users',
+        const response = await fetch(`http://localhost:3000/users/${id}`,
             {
                 method: 'PATCH',
                 headers: {
@@ -68,8 +68,24 @@ export async function updateUser(updates) {
                 body: JSON.stringify(updates)
             }
         )
+        return await response.json()
+
     } catch (error) {
 
     }
 
+}
+
+export async function fetchUsers() {
+    try {
+        const response = await fetch(`http://localhost:3000/users`)
+        if (!response.ok) {
+            throw new Error("Hubo un error");
+        }
+        const data = await response.json();
+        return data
+
+    } catch (error) {
+        console.error('se presentó el error:', error)
+    }
 }

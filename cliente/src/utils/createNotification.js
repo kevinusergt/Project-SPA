@@ -11,3 +11,15 @@ export function createdUserNoti() {
         timerProgressBar: true
     });
 }
+
+export function updatedUserNoti(){
+    return Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "success",
+        title: "Usuario actualizado",
+        showConfirmButton: false,
+        timer: 1500,
+        timerProgressBar: true
+    });
+}

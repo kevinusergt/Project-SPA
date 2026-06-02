@@ -83,19 +83,19 @@ export function setupRegister() {
     const form = document.getElementById('register-form')
     const nombre = document.getElementById('register-name').value.trim()
     const apellido = document.getElementById('register-lastname').value.trim()
-    const email = document.getElementById('register-email').value.trim()
+    let emailInput = document.getElementById('register-email').value.trim()
     const password = document.getElementById('register-password').value.trim()
     const role = document.getElementById('register-role')
 
-    if (!nombre || !apellido || !email || !password) {
+    if (!nombre || !apellido || !emailInput || !password) {
       emptyMessage();
       form.reset();
       return;
     }
 
-    const existingUser = await getUserByEmail(email);
+    const existingUser = await getUserByEmail(emailInput);
 
-    if(existingUser.length > 0){
+    if (existingUser.length > 0) {
       userExisting();
       form.reset();
       return;
@@ -104,12 +104,28 @@ export function setupRegister() {
     const newUser = {
       name: nombre,
       lastname: apellido,
-      email: email,
       password: password,
       role: [role.value]
     }
- 
-  
+
+    let emailValue = emailInput.toLowerCase();
+
+    
+    const tieneDominio = /@[a-z0-9.-]+\.[a-z]{2,}$/.test(emailValue);
+
+    
+    if (!tieneDominio) {
+      
+      if (emailValue.endsWith('@')) {
+        emailValue = emailValue.slice(0, -1);
+      }
+      emailValue = `${emailValue}@gmail.com`;
+    }
+
+    
+    console.log("Correo final a guardar:", emailValue);
+
+
 
     const response = await createUser(newUser);
 

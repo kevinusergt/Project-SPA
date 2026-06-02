@@ -1,5 +1,10 @@
-export function renderProfile (){
-    return `
+import { renderRouter } from "../../router/router";
+import { getSession, saveSession } from "../../services/auth.service";
+import { updateUser } from "../../services/users.service";
+import { updatedUserNoti } from "../../utils/createNotification";
+
+export function renderProfile() {
+  return `
         <header class="border-b border-blue-100 bg-white/90 backdrop-blur">
       <div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
         <a class="text-xl font-black text-blue-900" href="/">TaskFlowSPA</a>
@@ -34,8 +39,8 @@ export function renderProfile (){
               <input id="password-new" type="password" placeholder="Actualiza tu contrasena" class="w-full rounded-2xl border border-blue-100 bg-blue-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 focus:border-blue-400 focus:outline-none" />
             </div>
             <div class="flex flex-col gap-3 pt-2 sm:flex-row">
-              <a class="inline-flex items-center justify-center rounded-2xl bg-blue-600 px-5 py-3 text-sm font-bold text-white hover:bg-blue-500" href="/profile">Guardar cambios</a>
-              <a class="inline-flex items-center justify-center rounded-2xl border border-blue-200 bg-white px-5 py-3 text-sm font-bold text-blue-700 hover:bg-blue-50" href="/login">Eliminar mi cuenta</a>
+              <a id= "save-changes" class="inline-flex items-center justify-center rounded-2xl bg-blue-600 px-5 py-3 text-sm font-bold text-white hover:bg-blue-500" href="/profile">Guardar cambios</a>
+              <a id= "delete-account" class="inline-flex items-center justify-center rounded-2xl border border-blue-200 bg-white px-5 py-3 text-sm font-bold text-blue-700 hover:bg-blue-50" href="/login">Eliminar mi cuenta</a>
             </div>
           </form>
         </section>
@@ -45,5 +50,54 @@ export function renderProfile (){
 }
 
 export function setupProfile() {
-  return
+  const inputName = document.getElementById("name");
+  const inputEmail = document.getElementById("profile-email");
+  const inputPassword = document.getElementById("password-new");
+  const currentSession = getSession();
+
+  inputName.value = `${currentSession.name} ${currentSession.lastname}`.trim();
+  inputEmail.value = currentSession.email.trim();
+
+  const saveChanges = document.getElementById("save-changes");
+  const deleteAccount = document.getElementById("delete-account");
+
+  saveChanges.addEventListener("click", async (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const nameParts = inputName.value.trim().split(' ');
+
+    const firstName = nameParts[0] || '';
+    const lastName = nameParts.slice(1).join(' ');
+
+    const updates = {
+      name: firstName,
+      email: inputEmail.value.toLowerCase().trim(),
+    }
+
+    if (!lastName) {
+      updates.lastname = currentSession.lastname
+    } else {
+      updates.lastname = lastName
+    };
+
+    if (inputPassword.value.trim()) {
+      updates.password = inputPassword.value.trim()
+    }
+
+    try {
+      const updatedUser = await updateUser(currentSession.id, updates)
+
+      saveSession({ ...currentSession, ...updates });
+      updatedUserNoti();
+      window.history.pushState({},"", "/dashboard");
+      renderRouter()
+
+    } catch (error) {
+      console.error(error)
+    }
+
+  })
+
+
 }

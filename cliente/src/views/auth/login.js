@@ -65,7 +65,7 @@ export function setupLogin(){
     }
 
     const user = await loginSession(email, password);
-    window.history.replaceState({},"","/dashboard");
+    window.history.pushState({},"","/dashboard");
     renderRouter()
 
     if(!user){

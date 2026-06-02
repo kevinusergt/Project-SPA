@@ -1,7 +1,7 @@
 import { getSession, sessionLogout } from "../../services/auth.service";
 
 export function renderDashboard() {
-    return `
+  return `
       <header class="border-b border-blue-100 bg-white/90 backdrop-blur">
       <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <a class="text-xl font-black text-blue-900" href="/">TaskFlowSPA</a>
@@ -18,22 +18,22 @@ export function renderDashboard() {
     <main class="mx-auto max-w-6xl px-6 py-10">
       <section class="rounded-[2rem] bg-blue-600 px-8 py-10 text-white shadow-xl shadow-blue-100">
         <p class="text-sm font-semibold uppercase tracking-[0.3em] text-blue-100">Dashboard principal</p>
-        <h1 class="mt-3 text-4xl font-black tracking-tight">Bienvenida, Ana.</h1>
+        <h1 id = "welcome-user" class="mt-3 text-4xl font-black tracking-tight">Bienvenida, Ana.</h1>
         <p class="mt-4 max-w-2xl text-blue-50">Resumen general del trabajo del usuario, accesos rapidos y estado actual de productividad.</p>
       </section>
 
       <section class="mt-8 grid gap-4 md:grid-cols-3">
         <article class="rounded-3xl border border-blue-100 bg-white p-6 shadow-lg shadow-blue-50">
           <p class="text-sm text-slate-500">Tareas activas</p>
-          <p class="mt-3 text-4xl font-black text-blue-700">12</p>
+          <p id= "active-tasks" class="mt-3 text-4xl font-black text-blue-700">12</p>
         </article>
         <article class="rounded-3xl border border-blue-100 bg-white p-6 shadow-lg shadow-blue-50">
           <p class="text-sm text-slate-500">Completadas</p>
-          <p class="mt-3 text-4xl font-black text-blue-700">28</p>
+          <p id= "completed-tasks" class="mt-3 text-4xl font-black text-blue-700">28</p>
         </article>
         <article class="rounded-3xl border border-blue-100 bg-white p-6 shadow-lg shadow-blue-50">
           <p class="text-sm text-slate-500">Pendientes hoy</p>
-          <p class="mt-3 text-4xl font-black text-blue-700">4</p>
+          <p id= "pending-tasks" class="mt-3 text-4xl font-black text-blue-700">4</p>
         </article>
       </section>
 
@@ -59,9 +59,10 @@ export function renderDashboard() {
     `
 }
 
-export function setupDashboard(){
+export function setupDashboard() {
   const admin = document.getElementById("admin");
-
+  const welcomeUser = document.getElementById("welcome-user");
+  const logout = document.getElementById("logout");
   const currentSession = getSession();
   const userRole = currentSession.role[0];
 
@@ -69,10 +70,9 @@ export function setupDashboard(){
     admin.classList.add("hidden")
   }
 
+  welcomeUser.textContent = `Bienvenido, ${currentSession.name}`
 
-  const logout = document.getElementById("logout");
-
-  logout.addEventListener("click", ()=>{
+  logout.addEventListener("click", () => {
     sessionLogout();
   })
 }

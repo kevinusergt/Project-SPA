@@ -1,56 +1,57 @@
 {
   "users": [
     {
-      "name": "kevi",
-      "lastname": "villa",
-      "email": "kevin@gmail.com",
+      "name": "kevin",
+      "lastname": "villalobos",
       "password": "1234",
       "role": [
         "USER"
       ],
-      "id": "y1orlUc5r8U"
+      "email": "kevintest@gmail.com",
+      "id": "bPkdV_VlS8w"
     },
     {
-      "name": "kevi",
-      "lastname": "villa",
-      "email": "kevin@gmail.com",
+      "name": "kevin",
+      "lastname": "sir",
       "password": "1234",
+      "role": [
+        "ADMIN"
+      ],
+      "email": "adminsir@gmail.com",
+      "id": "TaD0yCu985E"
+    },
+    {
+      "name": "test",
+      "lastname": "test",
+      "password": "1234",
+      "role": [
+        "ADMIN"
+      ],
+      "email": "test12@gmail.com",
+      "id": "9DhQXtzV_tU"
+    },
+    {
+      "name": "an",
+      "lastname": "fwe",
+      "password": "12",
       "role": [
         "USER"
       ],
-      "id": "gFYRMBjvgOU"
+      "email": "sfdsf@hotmail.com@gmail.com",
+      "id": "ss4gU_6_pHs"
     },
     {
-      "name": "kevi",
-      "lastname": "villa",
-      "email": "kevin@gmail.com",
-      "password": "1234",
-      "role": [
-        "USER"
-      ],
-      "id": "Vy9OkXygsPo"
-    },
-    {
-      "name": "kevi",
-      "lastname": "villa",
-      "email": "kevin@gmail.com",
-      "password": "1234",
-      "role": [
-        "USER"
-      ],
-      "id": "Q1yLf9NM3Sk"
-    },
-    {
-      "name": "kevi",
-      "lastname": "villa",
-      "email": "dsada",
+      "name": "re",
+      "lastname": "qtr",
       "password": "123",
       "role": [
         "USER"
       ],
-      "id": "h-zoZulImxY"
+      "email": "freww",
+      "id": "7Gv9NERmAYg"
     }
   ],
   "roles": [],
+  "tasks":[],
   "$schema": "./node_modules/json-server/schema.json"
 }

@@ -1,4 +1,4 @@
-import { getSession, removeSession } from "../services/auth.service";
+import { getSession} from "../services/auth.service";
 import { notFoundedView, routes } from "./routes";
 
 
@@ -14,7 +14,6 @@ export function renderRouter() {
     };
 
     if (!session) {
-        removeSession();
         if (path !== "/login" && path !== "/register" && path !== "/") {
             window.history.replaceState({}, "", "/login")
         }
