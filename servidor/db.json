@@ -7,7 +7,7 @@
       "role": [
         "USER"
       ],
-      "email": "kevintest@gmail.com",
+      "email": "kevin@gmail.com",
       "id": "bPkdV_VlS8w"
     },
     {
@@ -19,39 +19,42 @@
       ],
       "email": "adminsir@gmail.com",
       "id": "TaD0yCu985E"
-    },
-    {
-      "name": "test",
-      "lastname": "test",
-      "password": "1234",
-      "role": [
-        "ADMIN"
-      ],
-      "email": "test12@gmail.com",
-      "id": "9DhQXtzV_tU"
-    },
-    {
-      "name": "an",
-      "lastname": "fwe",
-      "password": "12",
-      "role": [
-        "USER"
-      ],
-      "email": "sfdsf@hotmail.com@gmail.com",
-      "id": "ss4gU_6_pHs"
-    },
-    {
-      "name": "re",
-      "lastname": "qtr",
-      "password": "123",
-      "role": [
-        "USER"
-      ],
-      "email": "freww",
-      "id": "7Gv9NERmAYg"
     }
   ],
   "roles": [],
-  "tasks":[],
+  "tasks": [
+    {
+      "userId": "bPkdV_VlS8w",
+      "title": "crear funcion de tareas",
+      "description": "",
+      "state": "en progreso",
+      "date": "2026-06-05",
+      "id": "P5EB3d6jqyg"
+    },
+    {
+      "userId": "bPkdV_VlS8w",
+      "title": "verificar si funciona fetch",
+      "description": "descripcion breve",
+      "state": "en progreso",
+      "date": "",
+      "id": "3RvSwBtkLv8"
+    },
+    {
+      "userId": "bPkdV_VlS8w",
+      "title": "tarea para verificar pendiente",
+      "description": "123",
+      "state": "pendiente",
+      "date": "",
+      "id": "nCpU30FSY9o"
+    },
+    {
+      "userId": "bPkdV_VlS8w",
+      "title": "tarea completada test",
+      "description": "prueba completada",
+      "state": "completada",
+      "date": "2026-06-02",
+      "id": "COng0AXZqCU"
+    }
+  ],
   "$schema": "./node_modules/json-server/schema.json"
 }

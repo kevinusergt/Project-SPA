@@ -1,4 +1,6 @@
 import { getSession, sessionLogout } from "../../services/auth.service";
+import { renderFilterTasks } from "../../services/task.service";
+import { issuesFetchTask } from "../../utils/notifications";
 
 export function renderDashboard() {
   return `
@@ -59,12 +61,19 @@ export function renderDashboard() {
     `
 }
 
-export function setupDashboard() {
+export async function setupDashboard() {
+  const activeTask = document.getElementById("active-tasks");
+  const pendingTask = document.getElementById("pending-tasks");
+  const completedTask = document.getElementById("completed-tasks")
   const admin = document.getElementById("admin");
   const welcomeUser = document.getElementById("welcome-user");
   const logout = document.getElementById("logout");
   const currentSession = getSession();
   const userRole = currentSession.role[0];
+
+  logout.addEventListener("click", () => {
+    sessionLogout();
+  })
 
   if (userRole === "USER") {
     admin.classList.add("hidden")
@@ -72,7 +81,17 @@ export function setupDashboard() {
 
   welcomeUser.textContent = `Bienvenido, ${currentSession.name}`
 
-  logout.addEventListener("click", () => {
-    sessionLogout();
-  })
+  const userTasks = await renderFilterTasks(currentSession.id);
+
+  if (!userTasks) {
+    issuesFetchTask();
+  }
+
+  const inProgressTasks = userTasks.filter(task => task.state === "en progreso")
+  const completedTasks = userTasks.filter(task => task.state === "completada")
+  const pendingTasks = userTasks.filter(task => task.state === "pendiente")
+
+  activeTask.textContent = inProgressTasks.length;
+  pendingTask.textContent = pendingTasks.length;
+  completedTask.textContent = completedTasks.length;
 }

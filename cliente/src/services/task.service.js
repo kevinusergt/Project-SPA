@@ -11,3 +11,17 @@ export async function createTasks(tasks) {
 
     return await response.json()
 }
+
+export async function renderFilterTasks(userId) {
+    try {
+        const response = await fetch(`${baseUrl}?userId=${userId}`)
+        return response.json();
+
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+export async function deleteTask(id) {
+    return
+}

@@ -50,6 +50,7 @@ export async function deleteUser(id) {
                 },
             }
         );
+        return response.json()
     }
     catch (error) {
         console.error('se presentó el error:', error)

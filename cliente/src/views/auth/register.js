@@ -1,9 +1,8 @@
 
 import { createUser, getUserByEmail } from '../../services/users.service';
 import { renderRouter } from '../../router/router';
-import { createdUserNoti } from '../../utils/createNotification';
-import { userExisting } from '../../utils/existNotification';
-import { emptyMessage } from '../../utils/emptyNotification';
+import { createdUserNoti,emptyMessage,userExisting } from '../../utils/notifications';
+
 
 export function renderRegister() {
   return `

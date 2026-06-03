@@ -1,6 +1,6 @@
+
 import { renderRouter } from "../router/router"
-import { userDontExisting } from "../utils/existNotification"
-import { incorrectPassword } from "../utils/incorrectNotification"
+import { userDontExisting,incorrectPassword } from "../utils/notifications"
 import { getUserByEmail } from "./users.service"
 
 const userSession = "session-actual"
@@ -50,4 +50,5 @@ export async function loginSession(email,password) {
 export function sessionLogout() {
     removeSession();
     window.history.pushState({}, "", "/"); 
+    renderRouter()
 }

@@ -1,6 +1,6 @@
 import { renderRouter } from "../../router/router";
 import { loginSession } from "../../services/auth.service";
-import { emptyMessage } from "../../utils/emptyNotification";
+import { emptyMessage } from "../../utils/notifications";
 
 export function renderLogin() {
     return ` 

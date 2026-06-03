@@ -1,7 +1,7 @@
 import { renderRouter } from "../../router/router";
-import { getSession, saveSession } from "../../services/auth.service";
-import { updateUser } from "../../services/users.service";
-import { updatedUserNoti } from "../../utils/createNotification";
+import { getSession, saveSession, sessionLogout } from "../../services/auth.service";
+import { deleteUser, updateUser } from "../../services/users.service";
+import { updatedUserNoti } from "../../utils/notifications";
 
 export function renderProfile() {
   return `
@@ -99,5 +99,11 @@ export function setupProfile() {
 
   })
 
+  deleteAccount.addEventListener("click", async (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    deleteUser(currentSession.id);
+    sessionLogout()
+  })
 
 }

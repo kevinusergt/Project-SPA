@@ -1,5 +1,10 @@
+import { renderRouter } from "../../router/router"
+import { getSession } from "../../services/auth.service"
+import { createTasks } from "../../services/task.service"
+import { emptyTaskForm, issuesCreateTask } from "../../utils/notifications"
+
 export function renderTaskForm() {
-    return `
+  return `
         <header class="border-b border-blue-100 bg-white/90 backdrop-blur">
       <div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
         <a class="text-xl font-black text-blue-900" href="/">TaskFlowSPA</a>
@@ -44,8 +49,8 @@ export function renderTaskForm() {
           </div>
 
           <div class="flex flex-col gap-3 pt-2 sm:flex-row">
-            <a class="inline-flex items-center justify-center rounded-2xl bg-blue-600 px-5 py-3 text-sm font-bold text-white hover:bg-blue-500" href="/tasks">Guardar tarea</a>
-            <a class="inline-flex items-center justify-center rounded-2xl border border-blue-200 bg-white px-5 py-3 text-sm font-bold text-blue-700 hover:bg-blue-50" href="/tasks">Cancelar</a>
+            <a id= "save-task"class="inline-flex items-center justify-center rounded-2xl bg-blue-600 px-5 py-3 text-sm font-bold text-white hover:bg-blue-500" href="/tasks">Guardar tarea</a>
+            <a id= "abort"class="inline-flex items-center justify-center rounded-2xl border border-blue-200 bg-white px-5 py-3 text-sm font-bold text-blue-700 hover:bg-blue-50" href="/tasks">Cancelar</a>
           </div>
         </form>
       </section>
@@ -53,6 +58,40 @@ export function renderTaskForm() {
     `
 }
 
-export function setupTaskForm(){
-  return
+export function setupTaskForm() {
+  const saveTask = document.getElementById("save-task")
+
+  const currentSession = getSession();
+
+  saveTask.addEventListener("click", async (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const inputTitle = document.getElementById("title").value.trim()
+    const inputDescription = document.getElementById("description").value.trim()
+    const stateTask = document.getElementById("status").value
+    const dateTask = document.getElementById("date").value
+
+    if (!inputTitle) {
+      emptyTaskForm();
+      return;
+    }
+
+    const task = {
+      userId: currentSession.id,
+      title: inputTitle,
+      description: inputDescription,
+      state: stateTask.toLowerCase(),
+      date: dateTask
+    }
+
+    const createdTask = await createTasks(task)
+
+    if (!createdTask) {
+      issuesCreateTask();
+    }
+    window.history.pushState({},"","/tasks")
+    renderRouter();
+  })
+
+
 }
