@@ -1,5 +1,5 @@
 import { getSession } from "../../services/auth.service";
-import { renderFilterTasks } from "../../services/task.service";
+import { renderAllTasks, renderFilterTasks } from "../../services/task.service";
 import { issuesFetchTask } from "../../utils/notifications";
 
 export function renderTasks() {
@@ -69,23 +69,22 @@ export async function setupTasks() {
 
   if (userRole === "USER") {
     navAdmin.classList.add("hidden")
-  }
+    const tasks = await renderFilterTasks(currentSession.id);
 
-  const tasks = await renderFilterTasks(currentSession.id);
+    if (!tasks) {
+      issuesFetchTask();
+      container.innerHTML = "<p>No tienes tareas aun</p>"
+    }
+    container.innerHTML = "";
 
-  if (!tasks) {
-    issuesFetchTask();
-  }
-  container.innerHTML = "";
-
-  tasks.forEach(task => {
-    container.innerHTML += `
+    tasks.forEach(task => {
+      container.innerHTML += `
         <article class="rounded-3xl border border-blue-100 bg-white p-6 shadow-lg shadow-blue-50">
           <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
             <div>
               <p class="text-xs font-bold uppercase tracking-[0.25em] text-blue-600">${task.state}</p>
               <h2 class="mt-2 text-2xl font-bold text-slate-900">${task.title}</h2>
-              <p class="mt-3 max-w-2xl text-slate-600">${task.description !== "" ? task.description : "Sin descripcion..." }</p>
+              <p class="mt-3 max-w-2xl text-slate-600">${task.description !== "" ? task.description : "Sin descripcion..."}</p>
             </div>
             <div class="flex gap-3">
               <a class="rounded-full border border-blue-200 px-4 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-50" href="/task-form">Editar</a>
@@ -94,6 +93,29 @@ export async function setupTasks() {
           </div>
         </article>
     `
-  });
+    });
+  }
+
+  if (userRole === "ADMIN") {
+    const allTasks = await renderAllTasks();
+
+    if (!allTasks) {
+      issuesFetchTask();
+      container.innerHTML = "<p>No tienes tareas aun</p>"
+    }
+    console.log(allTasks)
+
+    container.innerHTML = "";
+
+    allTasks.forEach(userTasks =>{
+      container.innerHTML += "12" 
+    })
+
+
+
+
+  }
+
+
 
 }
