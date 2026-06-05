@@ -84,3 +84,13 @@ export function issuesFetchTask() {
         timer: 900
     });
 }
+
+export function deleteTaskNoti(){
+    return Swal.fire({
+        icon: "warning",
+        title: "¿Eliminar tarea?",
+        showCancelButton: true,
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar"
+      });
+}

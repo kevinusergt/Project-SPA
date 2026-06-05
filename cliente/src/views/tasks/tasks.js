@@ -1,6 +1,7 @@
+import { renderRouter } from "../../router/router";
 import { getSession } from "../../services/auth.service";
-import { renderAllTasks, renderFilterTasks } from "../../services/task.service";
-import { issuesFetchTask } from "../../utils/notifications";
+import { deleteTask, renderAllTasks, renderFilterTasks } from "../../services/task.service";
+import { deleteTaskNoti, issuesFetchTask } from "../../utils/notifications";
 
 export function renderTasks() {
   return `
@@ -87,13 +88,27 @@ export async function setupTasks() {
               <p class="mt-3 max-w-2xl text-slate-600">${task.description !== "" ? task.description : "Sin descripcion..."}</p>
             </div>
             <div class="flex gap-3">
-              <a class="rounded-full border border-blue-200 px-4 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-50" href="/task-form">Editar</a>
+              <a data-id="${task.id}" class="edit-btn rounded-full border border-blue-200 px-4 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-50" href="/task-form">Editar</a>
               <a class="rounded-full border border-blue-200 px-4 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-50" href="/tasks">Eliminar</a>
             </div>
           </div>
         </article>
     `
     });
+
+    const allEditButton = document.querySelectorAll(".del-btn")
+
+    allEditButton.forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const confirm = await deleteTaskNoti();
+
+        if (confirm.isConfirmed) {
+          await deleteTask(btn.dataset.id)
+          renderRouter();
+        }
+      })
+    })
+    return
   }
 
   if (userRole === "ADMIN") {
@@ -107,13 +122,48 @@ export async function setupTasks() {
 
     container.innerHTML = "";
 
-    allTasks.forEach(userTasks =>{
-      container.innerHTML += "12" 
+    allTasks.forEach(userTasks => {
+      container.innerHTML += `
+        <article class="rounded-3xl border border-blue-100 bg-white p-6 shadow-lg shadow-blue-50">
+          <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+            <div>
+              <p class="text-xs font-bold uppercase tracking-[0.25em] text-blue-600">${userTasks.state}</p>
+              <h2 class="mt-2 text-2xl font-bold text-slate-900">${userTasks.title}</h2>
+              <p class="mt-3 max-w-2xl text-slate-600">${userTasks.description !== "" ? userTasks.description : "Sin descripcion..."}</p>
+            </div>
+            <div class="flex gap-3">
+              <a data-id="${userTasks.id}" class="edit-btn rounded-full border border-blue-200 px-4 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-50" href="/task-form">Editar</a>
+              <button data-id="${userTasks.id}" class="del-btn rounded-full border border-blue-200 px-4 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-50" href="/tasks">Eliminar</button>
+            </div>
+          </div>
+        </article> `
     })
 
+    const allDelButton = document.querySelectorAll(".del-btn")
 
+    allDelButton.forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const confirm = await deleteTaskNoti();
 
+        if (confirm.isConfirmed) {
+          await deleteTask(btn.dataset.id)
+          renderRouter();
+        }
+      })
+    })
 
+    const allEditButton = document.querySelectorAll(".edit-btn")
+
+    allEditButton.forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        sessionStorage.setItem("editTaskId", btn.dataset.id);
+        console.log(sessionStorage.getItem("editTaskId"))
+        window.history.pushState({}, "", "/task-form");
+        renderRouter();
+      });
+    });
+    return
   }
 
 

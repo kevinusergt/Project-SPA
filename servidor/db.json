@@ -25,14 +25,6 @@
   "tasks": [
     {
       "userId": "bPkdV_VlS8w",
-      "title": "crear funcion de tareas",
-      "description": "",
-      "state": "en progreso",
-      "date": "2026-06-05",
-      "id": "P5EB3d6jqyg"
-    },
-    {
-      "userId": "bPkdV_VlS8w",
       "title": "verificar si funciona fetch",
       "description": "descripcion breve",
       "state": "en progreso",

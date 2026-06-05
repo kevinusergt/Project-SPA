@@ -15,7 +15,7 @@ export async function createTasks(tasks) {
 export async function renderFilterTasks(userId) {
     try {
         const response = await fetch(`${baseUrl}?userId=${userId}`)
-        return response.json();
+        return await response.json();
 
     } catch (error) {
         console.error(error)
@@ -31,6 +31,30 @@ export async function renderAllTasks() {
     }
 }
 
+export async function updateTask(taskId, updatedTask) {
+    try {
+        const response = await fetch(`${baseUrl}/${taskId}`,{
+            method: "PATCH",
+            headers: {"Content-Type": "applicatio/json"},
+            body: JSON.stringify(updatedTask)
+        })
+        
+        return await response.json()
+
+    } catch (error) {
+        console.error(error)
+    }
+}
+
 export async function deleteTask(id) {
-    return
+    try {
+        const response = await fetch(`${baseUrl}/${id}`,{
+            method: "DELETE",
+             headers: {"Content-Type": "applicatio/json"}
+        });
+
+        return await response.json()
+    } catch (error) {
+        
+    }
 }

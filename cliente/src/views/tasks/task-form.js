@@ -1,6 +1,6 @@
 import { renderRouter } from "../../router/router"
 import { getSession } from "../../services/auth.service"
-import { createTasks } from "../../services/task.service"
+import { createTasks, renderFilterTasks, updateTask } from "../../services/task.service"
 import { emptyTaskForm, issuesCreateTask } from "../../utils/notifications"
 
 export function renderTaskForm() {
@@ -58,18 +58,41 @@ export function renderTaskForm() {
     `
 }
 
-export function setupTaskForm() {
-  const saveTask = document.getElementById("save-task")
+export async function setupTaskForm() {
+  const titleInput = document.getElementById("title");
+  const descriptionInput = document.getElementById("description");
+  const statusInput = document.getElementById("status");
+  const dateInput = document.getElementById("date");
 
+  const saveTask = document.getElementById("save-task")
+  const idTask = sessionStorage.getItem("editTaskId")
   const currentSession = getSession();
 
+
+
+  if (idTask) {
+    const tasks = await renderFilterTasks(currentSession.id);
+    const task = tasks.find(t => String(t.id) === String(idTask));
+
+    if (task) {
+      titleInput.value = task.title;
+      descriptionInput.value = task.description;
+      statusInput.value = task.status;
+      dateInput.value = task.date || "";
+
+    } else {
+      sessionStorage.removeItem("editTaskId");
+    }
+  }
+
   saveTask.addEventListener("click", async (event) => {
-    event.preventDefault();
-    event.stopPropagation();
     const inputTitle = document.getElementById("title").value.trim()
     const inputDescription = document.getElementById("description").value.trim()
     const stateTask = document.getElementById("status").value
     const dateTask = document.getElementById("date").value
+    event.preventDefault();
+    event.stopPropagation();
+
 
     if (!inputTitle) {
       emptyTaskForm();
@@ -83,14 +106,26 @@ export function setupTaskForm() {
       state: stateTask.toLowerCase(),
       date: dateTask
     }
+    try {
+      if (idTask) {
+        const taskUpdate = await updateTask(idTask, task)
+        sessionStorage.removeItem("editTaskId")
+        window.history.replaceState({}, "", "/tasks");
+        renderRouter();
+      }
+      else {
+        const createdTask = await createTasks(task)
 
-    const createdTask = await createTasks(task)
+        if (!createdTask) {
+          issuesCreateTask();
+        }
+        window.history.pushState({}, "", "/tasks")
+        renderRouter();
+      }
+    } catch (error) {
 
-    if (!createdTask) {
-      issuesCreateTask();
     }
-    window.history.pushState({},"","/tasks")
-    renderRouter();
+
   })
 
 
