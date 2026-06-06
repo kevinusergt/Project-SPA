@@ -82,7 +82,7 @@ export function setupRegister() {
     const form = document.getElementById('register-form')
     const nombre = document.getElementById('register-name').value.trim()
     const apellido = document.getElementById('register-lastname').value.trim()
-    let emailInput = document.getElementById('register-email').value.trim()
+    const emailInput = document.getElementById('register-email').value.trim()
     const password = document.getElementById('register-password').value.trim()
     const role = document.getElementById('register-role')
 
@@ -119,7 +119,9 @@ export function setupRegister() {
         emailValue = emailValue.slice(0, -1);
       }
       emailValue = `${emailValue}@gmail.com`;
+      newUser.email = emailValue;
     }
+    newUser.email = emailValue;
 
     
     console.log("Correo final a guardar:", emailValue);

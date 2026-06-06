@@ -1,6 +1,7 @@
+import { renderRouter } from "../../router/router";
 import { getSession, sessionLogout } from "../../services/auth.service";
-import { renderFilterTasks } from "../../services/task.service";
-import { issuesFetchTask } from "../../utils/notifications";
+import { renderAllTasks, renderFilterTasks } from "../../services/task.service";
+import { issuesFetchTask, logoutNoti } from "../../utils/notifications";
 
 export function renderDashboard() {
   return `
@@ -46,7 +47,7 @@ export function renderDashboard() {
             <a class="text-sm font-semibold text-blue-700 hover:text-blue-600" href="/tasks">Ver tareas</a>
           </div>
           <div class="mt-6 grid gap-4 sm:grid-cols-2">
-            <a class="rounded-3xl bg-blue-50 p-5 hover:bg-blue-100" href="/task-form">
+            <a id="create-task" class="rounded-3xl bg-blue-50 p-5 hover:bg-blue-100" href="/task-form">
               <p class="text-sm font-semibold text-blue-600">Crear</p>
               <h3 class="mt-2 text-lg font-bold text-slate-900">Nueva tarea</h3>
             </a>
@@ -62,6 +63,7 @@ export function renderDashboard() {
 }
 
 export async function setupDashboard() {
+  const createTask = document.getElementById("create-task");
   const activeTask = document.getElementById("active-tasks");
   const pendingTask = document.getElementById("pending-tasks");
   const completedTask = document.getElementById("completed-tasks")
@@ -71,27 +73,65 @@ export async function setupDashboard() {
   const currentSession = getSession();
   const userRole = currentSession.role[0];
 
-  logout.addEventListener("click", () => {
-    sessionLogout();
+  createTask.addEventListener("click", () => {
+    sessionStorage.removeItem("taskId")
+  })
+
+  logout.addEventListener("click", async (e) => {
+    
+    e.preventDefault();
+
+    e.stopPropagation();
+
+    const confirm = await logoutNoti();
+
+    if (confirm.isConfirmed) {
+      console.log("adios")
+      sessionLogout();
+      sessionStorage.removeItem("taskId")
+      window.history.pushState({},"", "/login")
+      renderRouter()
+    }
+
   })
 
   if (userRole === "USER") {
     admin.classList.add("hidden")
+    welcomeUser.textContent = `Bienvenido, ${currentSession.name}`
+
+    const userTasks = await renderFilterTasks(currentSession.id);
+    console.log(userTasks)
+
+    if (!userTasks) {
+      issuesFetchTask();
+    }
+
+    const inProgressTasks = userTasks.filter(task => task.state === "en progreso")
+    const completedTasks = userTasks.filter(task => task.state === "completada")
+    const pendingTasks = userTasks.filter(task => task.state === "pendiente")
+
+    activeTask.textContent = inProgressTasks.length;
+    pendingTask.textContent = pendingTasks.length;
+    completedTask.textContent = completedTasks.length;
+
+
   }
+  if (userRole === "ADMIN") {
 
-  welcomeUser.textContent = `Bienvenido, ${currentSession.name}`
+    welcomeUser.textContent = `Bienvenido, ${currentSession.name}`
 
-  const userTasks = await renderFilterTasks(currentSession.id);
+    const usersTasks = await renderAllTasks();
 
-  if (!userTasks) {
-    issuesFetchTask();
+    if (!usersTasks) {
+      issuesFetchTask();
+    }
+
+    const inProgressTasks = usersTasks.filter(task => task.state === "en progreso")
+    const completedTasks = usersTasks.filter(task => task.state === "completada")
+    const pendingTasks = usersTasks.filter(task => task.state === "pendiente")
+
+    activeTask.textContent = inProgressTasks.length;
+    pendingTask.textContent = pendingTasks.length;
+    completedTask.textContent = completedTasks.length;
   }
-
-  const inProgressTasks = userTasks.filter(task => task.state === "en progreso")
-  const completedTasks = userTasks.filter(task => task.state === "completada")
-  const pendingTasks = userTasks.filter(task => task.state === "pendiente")
-
-  activeTask.textContent = inProgressTasks.length;
-  pendingTask.textContent = pendingTasks.length;
-  completedTask.textContent = completedTasks.length;
 }

@@ -1,6 +1,6 @@
 import { renderRouter } from "../../router/router"
 import { getSession } from "../../services/auth.service"
-import { createTasks, renderFilterTasks, updateTask } from "../../services/task.service"
+import { createTasks, renderAllTasks, renderFilterTasks, updateTask } from "../../services/task.service"
 import { emptyTaskForm, issuesCreateTask } from "../../utils/notifications"
 
 export function renderTaskForm() {
@@ -37,9 +37,9 @@ export function renderTaskForm() {
             <div>
               <label class="mb-2 block text-sm font-medium text-slate-700" for="status">Estado</label>
               <select id="status" class="w-full rounded-2xl border border-blue-100 bg-blue-50 px-4 py-3 text-slate-900 focus:border-blue-400 focus:outline-none">
-                <option>Pendiente</option>
-                <option>En progreso</option>
-                <option>Completada</option>
+                <option>pendiente</option>
+                <option>en progreso</option>
+                <option>completada</option>
               </select>
             </div>
             <div>
@@ -65,51 +65,73 @@ export async function setupTaskForm() {
   const dateInput = document.getElementById("date");
 
   const saveTask = document.getElementById("save-task")
-  const idTask = sessionStorage.getItem("editTaskId")
+  const idTask = sessionStorage.getItem("taskId")
   const currentSession = getSession();
 
 
+  if (currentSession.role[0] === "ADMIN") {
+    if (idTask) {
+      const tasks = await renderAllTasks();
+      const task = tasks.find(t => String(t.id) === String(idTask));
 
-  if (idTask) {
-    const tasks = await renderFilterTasks(currentSession.id);
-    const task = tasks.find(t => String(t.id) === String(idTask));
+      if (task) {
+        console.log(task)
+        titleInput.value = task.title;
+        descriptionInput.value = task.description;
+        statusInput.value = task.state;
+        dateInput.value = task.date || "";
 
-    if (task) {
-      titleInput.value = task.title;
-      descriptionInput.value = task.description;
-      statusInput.value = task.status;
-      dateInput.value = task.date || "";
-
-    } else {
-      sessionStorage.removeItem("editTaskId");
+      } else {
+        sessionStorage.removeItem("taskId");
+      }
     }
   }
 
+  if(currentSession.role[0] === "USER") {
+    if (idTask) {
+      const tasks = await renderFilterTasks(currentSession.id);
+      console.log(tasks)
+      const task = tasks.find(t => String(t.id) === String(idTask));
+
+      if (task) {
+        console.log(task)
+        titleInput.value = task.title;
+        descriptionInput.value = task.description;
+        statusInput.value = task.state;
+        dateInput.value = task.date || "";
+
+      } else {
+        sessionStorage.removeItem("taskId");
+      }
+    }
+  }
+
+
   saveTask.addEventListener("click", async (event) => {
-    const inputTitle = document.getElementById("title").value.trim()
-    const inputDescription = document.getElementById("description").value.trim()
-    const stateTask = document.getElementById("status").value
-    const dateTask = document.getElementById("date").value
+    const title = titleInput.value.trim()
+    const description = descriptionInput.value.trim()
+    const state = statusInput.value.toLowerCase()
+    const date = dateInput.value
     event.preventDefault();
     event.stopPropagation();
 
 
-    if (!inputTitle) {
+    if (!title) {
       emptyTaskForm();
       return;
     }
 
     const task = {
       userId: currentSession.id,
-      title: inputTitle,
-      description: inputDescription,
-      state: stateTask.toLowerCase(),
-      date: dateTask
+      title,
+      description,
+      state,
+      date
     }
     try {
       if (idTask) {
         const taskUpdate = await updateTask(idTask, task)
-        sessionStorage.removeItem("editTaskId")
+        sessionStorage.removeItem("taskId")
         window.history.replaceState({}, "", "/tasks");
         renderRouter();
       }

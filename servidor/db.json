@@ -19,6 +19,26 @@
       ],
       "email": "adminsir@gmail.com",
       "id": "TaD0yCu985E"
+    },
+    {
+      "name": "sergio",
+      "lastname": "perez",
+      "password": "1234",
+      "role": [
+        "USER"
+      ],
+      "email": "sergio@gmail.com",
+      "id": "hMQ7ubJ00GY"
+    },
+    {
+      "name": "Camilo",
+      "lastname": "Villalobos",
+      "password": "12345",
+      "role": [
+        "USER"
+      ],
+      "email": "villalobosandres989@gmail.com",
+      "id": "1ESzg6K11ZU"
     }
   ],
   "roles": [],
@@ -33,19 +53,27 @@
     },
     {
       "userId": "bPkdV_VlS8w",
-      "title": "tarea para verificar pendiente",
-      "description": "123",
-      "state": "pendiente",
-      "date": "",
-      "id": "nCpU30FSY9o"
-    },
-    {
-      "userId": "bPkdV_VlS8w",
       "title": "tarea completada test",
       "description": "prueba completada",
       "state": "completada",
       "date": "2026-06-02",
       "id": "COng0AXZqCU"
+    },
+    {
+      "userId": "hMQ7ubJ00GY",
+      "title": "ejemplo sergio",
+      "description": "balistico",
+      "state": "en progreso",
+      "date": "2026-06-19",
+      "id": "ZDDbyCBfnQo"
+    },
+    {
+      "userId": "1ESzg6K11ZU",
+      "title": "Projecrt",
+      "description": "hoal",
+      "state": "en progreso",
+      "date": "",
+      "id": "wHVUSVA7vKw"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

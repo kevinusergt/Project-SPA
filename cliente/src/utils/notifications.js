@@ -94,3 +94,13 @@ export function deleteTaskNoti(){
         cancelButtonText: "Cancelar"
       });
 }
+
+export function logoutNoti(){
+    return Swal.fire({
+        icon: "warning",
+        title: "¿Desea Cerrar Sesión?",
+        showCancelButton: true,
+        confirmButtonText: "Sí, salir",
+        cancelButtonText: "Cancelar"
+      });
+}

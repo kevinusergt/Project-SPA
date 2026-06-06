@@ -24,7 +24,7 @@ export function renderTasks() {
           <h1 class="mt-3 text-4xl font-black tracking-tight">Mis tareas</h1>
           <p class="mt-4 max-w-2xl text-blue-50">Vista principal para listar, editar y eliminar las tareas del usuario autenticado.</p>
         </div>
-        <a class="inline-flex items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-bold text-blue-700 hover:bg-blue-50" href="/task-form">
+        <a id="create-task" class="inline-flex items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-bold text-blue-700 hover:bg-blue-50" href="/task-form">
           Crear tarea
         </a>
       </section>
@@ -63,10 +63,15 @@ export function renderTasks() {
 }
 
 export async function setupTasks() {
+  const createTask = document.getElementById("create-task")
   const container = document.getElementById("container")
   const navAdmin = document.getElementById("admin");
   const currentSession = getSession();
   const userRole = currentSession.role[0];
+
+  createTask.addEventListener("click",()=>{
+    sessionStorage.removeItem("taskId")
+  })
 
   if (userRole === "USER") {
     navAdmin.classList.add("hidden")
@@ -96,9 +101,9 @@ export async function setupTasks() {
     `
     });
 
-    const allEditButton = document.querySelectorAll(".del-btn")
+    const allDelButton = document.querySelectorAll(".del-btn")
 
-    allEditButton.forEach(btn => {
+    allDelButton.forEach(btn => {
       btn.addEventListener("click", async () => {
         const confirm = await deleteTaskNoti();
 
@@ -108,7 +113,19 @@ export async function setupTasks() {
         }
       })
     })
-    return
+
+    const allEditButton = container.querySelectorAll(".edit-btn")
+
+    allEditButton.forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        sessionStorage.setItem("taskId", btn.dataset.id)
+        window.history.pushState({}, "", "/task-form")
+        renderRouter()
+
+      });
+    });
   }
 
   if (userRole === "ADMIN") {
@@ -152,18 +169,19 @@ export async function setupTasks() {
       })
     })
 
-    const allEditButton = document.querySelectorAll(".edit-btn")
+    const allEditButton = container.querySelectorAll(".edit-btn")
 
     allEditButton.forEach(btn => {
       btn.addEventListener("click", (e) => {
         e.preventDefault();
-        sessionStorage.setItem("editTaskId", btn.dataset.id);
-        console.log(sessionStorage.getItem("editTaskId"))
-        window.history.pushState({}, "", "/task-form");
-        renderRouter();
+        e.stopPropagation();
+        sessionStorage.setItem("taskId", btn.dataset.id)
+        window.history.pushState({}, "", "/task-form")
+        renderRouter()
+
       });
     });
-    return
+
   }
 
 
